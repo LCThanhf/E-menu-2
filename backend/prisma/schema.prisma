@@ -1,0 +1,189 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ADMIN AUTHENTICATION
+// ============================================
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  fullName  String   @map("full_name")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+// ============================================
+// RESTAURANT TABLES
+// ============================================
+
+model Table {
+  id              Int              @id @default(autoincrement())
+  tableNumber     String           @unique @map("table_number") // e.g., "01", "02"
+  tableName       String           @map("table_name") // e.g., "Bàn 1", "Bàn 2"
+  status          TableStatus      @default(AVAILABLE)
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  
+  // Relations
+  orders          Order[]
+  staffCalls      StaffCall[]
+  paymentRequests PaymentRequest[]
+
+  @@map("tables")
+}
+
+enum TableStatus {
+  AVAILABLE   // Bàn trống
+  OCCUPIED    // Đang có khách
+}
+
+// ============================================
+// MENU CATEGORIES & ITEMS
+// ============================================
+
+model Category {
+  id        Int        @id @default(autoincrement())
+  slug      String     @unique // e.g., "appetizer", "main", "drink", "dessert"
+  name      String     // e.g., "Khai vị", "Món chính", "Đồ uống", "Tráng miệng"
+  sortOrder Int        @default(0) @map("sort_order")
+  isActive  Boolean    @default(true) @map("is_active")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  
+  // Relations
+  menuItems MenuItem[]
+
+  @@map("categories")
+}
+
+model MenuItem {
+  id          Int      @id @default(autoincrement())
+  name        String   // e.g., "Gỏi cuốn tôm thịt"
+  description String?  @db.Text // e.g., "Bánh tráng cuốn với tôm, thịt heo..."
+  price       Int      // Price in VND, e.g., 45000
+  image       String?  // Image URL or path
+  isActive    Boolean  @default(true) @map("is_active")
+  isAvailable Boolean  @default(true) @map("is_available") // For sold out items
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  categoryId  Int      @map("category_id")
+  category    Category @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
+
+  @@map("menu_items")
+}
+
+// ============================================
+// ORDERS
+// ============================================
+
+model Order {
+  id           Int         @id @default(autoincrement())
+  orderNumber  String      @unique @map("order_number") // Auto-generated order number
+  customerName String      @map("customer_name")
+  status       OrderStatus @default(PENDING)
+  totalAmount  Int         @default(0) @map("total_amount") // Total in VND
+  notes        String?     @db.Text
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  
+  // Relations
+  tableId      Int         @map("table_id")
+  table        Table       @relation(fields: [tableId], references: [id])
+  orderItems   OrderItem[]
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING     // Đang chờ xử lý
+  CONFIRMED   // Đã xác nhận
+  PREPARING   // Đang chuẩn bị
+  READY       // Sẵn sàng phục vụ
+  SERVED      // Đã phục vụ
+  COMPLETED   // Hoàn thành
+  CANCELLED   // Đã hủy
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  quantity  Int      @default(1)
+  unitPrice Int      @map("unit_price") // Price at time of order
+  itemName  String?  @map("item_name") // Name at time of order (optional for old records)
+  notes     String?  // Special instructions
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  orderId    Int      @map("order_id")
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId Int      @map("menu_item_id")
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@map("order_items")
+}
+
+// ============================================
+// STAFF CALLS
+// ============================================
+
+model StaffCall {
+  id           Int             @id @default(autoincrement())
+  customerName String          @map("customer_name")
+  reason       String          // e.g., "Thêm bát", "Thêm đũa", custom text
+  status       StaffCallStatus @default(PENDING)
+  createdAt    DateTime        @default(now()) @map("created_at")
+  updatedAt    DateTime        @updatedAt @map("updated_at")
+  
+  // Relations
+  tableId      Int             @map("table_id")
+  table        Table           @relation(fields: [tableId], references: [id])
+
+  @@map("staff_calls")
+}
+
+enum StaffCallStatus {
+  PENDING     // Đang chờ
+  ACKNOWLEDGED // Đã nhận
+  COMPLETED   // Hoàn thành
+}
+
+// ============================================
+// PAYMENT REQUESTS
+// ============================================
+
+model PaymentRequest {
+  id            Int                  @id @default(autoincrement())
+  customerName  String               @map("customer_name")
+  paymentMethod String               @map("payment_method") // "Tiền mặt", "Chuyển khoản", "Thẻ ATM"
+  status        PaymentRequestStatus @default(PENDING)
+  createdAt     DateTime             @default(now()) @map("created_at")
+  updatedAt     DateTime             @updatedAt @map("updated_at")
+  
+  // Relations
+  tableId       Int                  @map("table_id")
+  table         Table                @relation(fields: [tableId], references: [id])
+
+  @@map("payment_requests")
+}
+
+enum PaymentRequestStatus {
+  PENDING     // Đang chờ
+  PROCESSING  // Đang xử lý
+  COMPLETED   // Hoàn thành
+}
