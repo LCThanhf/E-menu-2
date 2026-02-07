@@ -265,7 +265,7 @@ export function MenuPage({ tableNumber, tableSlug }: MenuPageProps) {
       {/* Footer */}
       <footer className="border-t border-border bg-card px-4 py-6">
         <div className="mx-auto max-w-7xl text-center text-sm text-muted-foreground">
-          <p>Hệ thống thực đơn điện tử</p>
+          <p>Hệ thống thực đơn điện tử © 2026</p>
         </div>
       </footer>
 

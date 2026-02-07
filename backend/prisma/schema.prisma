@@ -113,9 +113,6 @@ model Order {
 enum OrderStatus {
   PENDING     // Đang chờ xử lý
   CONFIRMED   // Đã xác nhận
-  PREPARING   // Đang chuẩn bị
-  READY       // Sẵn sàng phục vụ
-  SERVED      // Đã phục vụ
   COMPLETED   // Hoàn thành
   CANCELLED   // Đã hủy
 }
@@ -130,10 +127,10 @@ model OrderItem {
   updatedAt DateTime @updatedAt @map("updated_at")
   
   // Relations
-  orderId    Int      @map("order_id")
-  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  menuItemId Int      @map("menu_item_id")
-  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  orderId    Int       @map("order_id")
+  order      Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId Int?      @map("menu_item_id")
+  menuItem   MenuItem? @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
 
   @@map("order_items")
 }

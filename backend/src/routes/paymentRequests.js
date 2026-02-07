@@ -8,7 +8,7 @@ const router = express.Router()
 // Get All Payment Requests (Staff/Admin)
 // GET /api/payment-requests
 // ============================================
-router.get('/', authMiddleware, staffMiddleware, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const { status, tableId } = req.query
 
@@ -42,7 +42,7 @@ router.get('/', authMiddleware, staffMiddleware, async (req, res) => {
 // Get Pending Payment Requests (Staff/Admin)
 // GET /api/payment-requests/pending
 // ============================================
-router.get('/pending', authMiddleware, staffMiddleware, async (req, res) => {
+router.get('/pending', async (req, res) => {
   try {
     const paymentRequests = await prisma.paymentRequest.findMany({
       where: { status: 'PENDING' },
@@ -125,7 +125,7 @@ router.post('/', async (req, res) => {
 // Update Payment Request Status (Staff/Admin)
 // PUT /api/payment-requests/:id
 // ============================================
-router.put('/:id', authMiddleware, staffMiddleware, async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params
     const { status } = req.body
@@ -179,7 +179,7 @@ router.put('/:id', authMiddleware, staffMiddleware, async (req, res) => {
 // Delete Payment Request (Admin only)
 // DELETE /api/payment-requests/:id
 // ============================================
-router.delete('/:id', authMiddleware, staffMiddleware, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params
 

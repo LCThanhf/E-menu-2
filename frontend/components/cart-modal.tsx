@@ -9,6 +9,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
+const BACKEND_URL = API_URL.replace("/api", "")
+
 interface CartItem {
   id: number
   name: string
@@ -75,8 +78,16 @@ export function CartModal({
                   className="flex gap-4 p-4 rounded-lg border border-border bg-card"
                 >
                   {/* Image */}
-                  <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-muted flex items-center justify-center">
-                    <span className="text-xl">🍽️</span>
+                  <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-muted flex items-center justify-center overflow-hidden border border-black/30 dark:border-white/30">
+                    {item.image ? (
+                      <img
+                        src={item.image.startsWith("http") ? item.image : `${BACKEND_URL}${item.image}`}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-xl">🍽️</span>
+                    )}
                   </div>
 
                   {/* Details */}

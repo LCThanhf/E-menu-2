@@ -16,7 +16,7 @@ const generateOrderNumber = () => {
 // Get All Orders (Staff/Admin)
 // GET /api/orders
 // ============================================
-router.get('/', authMiddleware, staffMiddleware, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const { status, tableId, date } = req.query
 
@@ -257,7 +257,7 @@ router.post('/', async (req, res) => {
 // Update Order Status (Staff/Admin)
 // PUT /api/orders/:id
 // ============================================
-router.put('/:id', authMiddleware, staffMiddleware, async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params
     const { status, notes } = req.body
@@ -303,25 +303,24 @@ router.put('/:id', authMiddleware, staffMiddleware, async (req, res) => {
 })
 
 // ============================================
-// Cancel Order
+// Delete Order
 // DELETE /api/orders/:id
 // ============================================
-router.delete('/:id', authMiddleware, staffMiddleware, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params
 
-    const order = await prisma.order.update({
+    // Delete the order (order items will be deleted automatically due to onDelete: Cascade)
+    await prisma.order.delete({
       where: { id: parseInt(id) },
-      data: { status: 'CANCELLED' },
     })
 
     res.json({
       success: true,
-      message: 'Order cancelled successfully',
-      data: order,
+      message: 'Order deleted successfully',
     })
   } catch (error) {
-    console.error('Cancel order error:', error)
+    console.error('Delete order error:', error)
     if (error.code === 'P2025') {
       return res.status(404).json({
         success: false,

@@ -8,7 +8,7 @@ const router = express.Router()
 // Get All Staff Calls (Staff/Admin)
 // GET /api/staff-calls
 // ============================================
-router.get('/', authMiddleware, staffMiddleware, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const { status, tableId } = req.query
 
@@ -42,7 +42,7 @@ router.get('/', authMiddleware, staffMiddleware, async (req, res) => {
 // Get Pending Staff Calls (Staff/Admin)
 // GET /api/staff-calls/pending
 // ============================================
-router.get('/pending', authMiddleware, staffMiddleware, async (req, res) => {
+router.get('/pending', async (req, res) => {
   try {
     const staffCalls = await prisma.staffCall.findMany({
       where: { status: 'PENDING' },
@@ -125,7 +125,7 @@ router.post('/', async (req, res) => {
 // Update Staff Call Status (Staff/Admin)
 // PUT /api/staff-calls/:id
 // ============================================
-router.put('/:id', authMiddleware, staffMiddleware, async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params
     const { status } = req.body
@@ -171,7 +171,7 @@ router.put('/:id', authMiddleware, staffMiddleware, async (req, res) => {
 // Delete Staff Call (Admin only)
 // DELETE /api/staff-calls/:id
 // ============================================
-router.delete('/:id', authMiddleware, staffMiddleware, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params
 

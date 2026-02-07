@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 
 const app = express()
 
@@ -11,6 +12,9 @@ app.use(cors({
 }))
 app.use(express.json())
 
+// Serve static files from uploads directory
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
+
 // Import routes
 const categoryRoutes = require('./routes/categories')
 const menuItemRoutes = require('./routes/menuItems')
@@ -19,6 +23,7 @@ const orderRoutes = require('./routes/orders')
 const staffCallRoutes = require('./routes/staffCalls')
 const paymentRequestRoutes = require('./routes/paymentRequests')
 const authRoutes = require('./routes/auth')
+const uploadRoutes = require('./routes/upload')
 
 // API Routes
 app.use('/api/categories', categoryRoutes)
@@ -28,6 +33,7 @@ app.use('/api/orders', orderRoutes)
 app.use('/api/staff-calls', staffCallRoutes)
 app.use('/api/payment-requests', paymentRequestRoutes)
 app.use('/api/auth', authRoutes)
+app.use('/api/upload', uploadRoutes)
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
