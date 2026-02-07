@@ -128,6 +128,7 @@ export default function AdminDashboardLayout({
             <button
               onClick={() => setIsSidebarOpen(false)}
               className="lg:hidden text-muted-foreground hover:text-foreground"
+              aria-label="Đóng menu"
             >
               <X className="h-5 w-5" />
             </button>
@@ -185,6 +186,7 @@ export default function AdminDashboardLayout({
           <button
             onClick={() => setIsSidebarOpen(true)}
             className="text-muted-foreground hover:text-foreground"
+            aria-label="Mở menu"
           >
             <Menu className="h-6 w-6" />
           </button>

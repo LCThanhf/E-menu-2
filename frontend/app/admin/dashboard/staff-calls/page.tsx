@@ -254,7 +254,8 @@ export default function StaffCallsPage() {
                 )}
               </div>
             </div>
-          ))}n        </div>
+          ))}
+        </div>
       )}
 
       {/* Delete Confirmation Modal */}

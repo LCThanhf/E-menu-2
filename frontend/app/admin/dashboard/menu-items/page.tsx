@@ -453,6 +453,7 @@ export default function MenuItemsPage() {
                     accept="image/jpeg,image/jpg,image/png,image/webp"
                     onChange={handleImageChange}
                     className="hidden"
+                    aria-label="Tải ảnh món ăn"
                   />
                   <Button
                     type="button"
