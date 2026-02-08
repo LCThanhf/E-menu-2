@@ -10,7 +10,6 @@ A modern, full-stack digital menu solution for restaurants with real-time order 
 - Shopping cart and order placement
 - Staff call with customizable reasons
 - Payment requests with multiple methods
-- Automatic dark/light theme
 
 ### Admin Features
 - Dashboard with real-time statistics
@@ -195,21 +194,6 @@ Use managed MySQL: PlanetScale, AWS RDS, or Railway
 - Check browser console errors
 - Verify API_URL in frontend .env.local
 
-## License
-
-MIT License
-
 ## Author
 
 LCThanhf - [GitHub](https://github.com/LCThanhf)
-
-## Version History
-
-**v1.0.0 (2026-02-09)**
-- Initial release with full menu, order, and admin management
-- QR code generation
-- Authentication and payment system
-
----
-
-Made for modern restaurants
