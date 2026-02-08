@@ -239,7 +239,7 @@ export default function PaymentRequestsPage() {
                 {request.status === "PENDING" && (
                   <Button
                     size="sm"
-                    className="flex-1"
+                    className="flex-1 justify-center"
                     onClick={() => handleUpdateStatus(request.id, "PROCESSING")}
                   >
                     Đang xử lý
@@ -248,10 +248,9 @@ export default function PaymentRequestsPage() {
                 {request.status === "PROCESSING" && (
                   <Button
                     size="sm"
-                    className="flex-1"
+                    className="flex-1 justify-center"
                     onClick={() => handleUpdateStatus(request.id, "COMPLETED")}
                   >
-                    <Check className="mr-1 h-4 w-4" />
                     Hoàn thành
                   </Button>
                 )}

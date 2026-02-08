@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react"
 import {
   Loader2,
   RefreshCw,
-  Check,
   Bell,
   X,
 } from "lucide-react"
@@ -230,20 +229,18 @@ export default function StaffCallsPage() {
                 {call.status === "PENDING" && (
                   <Button
                     size="sm"
-                    className="flex-1"
+                    className="flex-1 justify-center"
                     onClick={() => handleUpdateStatus(call.id, "ACKNOWLEDGED")}
                   >
-                    <Check className="mr-1 h-4 w-4" />
                     Đã nhận
                   </Button>
                 )}
                 {call.status === "ACKNOWLEDGED" && (
                   <Button
                     size="sm"
-                    className="flex-1"
+                    className="flex-1 justify-center"
                     onClick={() => handleUpdateStatus(call.id, "COMPLETED")}
                   >
-                    <Check className="mr-1 h-4 w-4" />
                     Hoàn thành
                   </Button>
                 )}

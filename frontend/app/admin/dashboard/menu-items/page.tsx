@@ -91,7 +91,7 @@ export default function MenuItemsPage() {
 
   const fetchMenuItems = async () => {
     try {
-      const response = await fetch(`${API_URL}/menu-items`)
+      const response = await fetch(`${API_URL}/menu-items?available=false`)
       const data = await response.json()
       if (data.success) {
         setMenuItems(data.data)
@@ -377,18 +377,11 @@ export default function MenuItemsPage() {
                       {formatPrice(item.price)}
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <div className="flex flex-col items-center gap-1">
-                        <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
-                          item.isActive ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400"
-                        }`}>
-                          {item.isActive ? "Hiển thị" : "Ẩn"}
-                        </span>
-                        <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
-                          item.isAvailable ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                        }`}>
-                          {item.isAvailable ? "Còn hàng" : "Hết hàng"}
-                        </span>
-                      </div>
+                      <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                        item.isAvailable ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                      }`}>
+                        {item.isAvailable ? "Còn hàng" : "Hết hàng"}
+                      </span>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-2">
@@ -540,24 +533,14 @@ export default function MenuItemsPage() {
               </Select>
             </div>
 
-            {/* Status Switches */}
-            <div className="flex gap-6">
-              <div className="flex items-center gap-2">
-                <Switch
-                  id="isActive"
-                  checked={formData.isActive}
-                  onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
-                />
-                <Label htmlFor="isActive">Hiển thị</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <Switch
-                  id="isAvailable"
-                  checked={formData.isAvailable}
-                  onCheckedChange={(checked) => setFormData({ ...formData, isAvailable: checked })}
-                />
-                <Label htmlFor="isAvailable">Còn hàng</Label>
-              </div>
+            {/* Status Switch */}
+            <div className="flex items-center gap-2">
+              <Switch
+                id="isAvailable"
+                checked={formData.isAvailable}
+                onCheckedChange={(checked) => setFormData({ ...formData, isAvailable: checked })}
+              />
+              <Label htmlFor="isAvailable">Còn hàng</Label>
             </div>
 
             <DialogFooter>

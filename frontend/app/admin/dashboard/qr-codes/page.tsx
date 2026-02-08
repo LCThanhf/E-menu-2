@@ -69,7 +69,9 @@ export default function QRCodesPage() {
   }
 
   const getTableUrl = (tableNumber: string) => {
-    return `${FRONTEND_URL}/${tableNumber}`
+    // Convert tableNumber like "01" to "table1"
+    const num = parseInt(tableNumber, 10)
+    return `${FRONTEND_URL}/table${num}`
   }
 
   const handleDownloadQR = async (table: Table) => {
