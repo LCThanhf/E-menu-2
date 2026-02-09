@@ -193,7 +193,3 @@ Use managed MySQL: PlanetScale, AWS RDS, or Railway
 - Verify backend runs on port 5000
 - Check browser console errors
 - Verify API_URL in frontend .env.local
-
-## Author
-
-LCThanhf - [GitHub](https://github.com/LCThanhf)
