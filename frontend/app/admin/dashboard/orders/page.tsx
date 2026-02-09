@@ -289,7 +289,7 @@ export default function OrdersPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => openDeleteModal(order)}
-                    className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    className="text-red-600 hover:bg-red-500 hover:text-white hover:border-red-500 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white dark:hover:border-red-600"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -436,7 +436,7 @@ export default function OrdersPage() {
             <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
               Không
             </Button>
-            <Button variant="destructive" onClick={handleDeleteOrder}>
+            <Button variant="destructive" className="hover:brightness-110 transition-all" onClick={handleDeleteOrder}>
               Xóa
             </Button>
           </DialogFooter>
@@ -456,7 +456,7 @@ export default function OrdersPage() {
             <Button variant="outline" onClick={() => setIsCancelModalOpen(false)}>
               Không
             </Button>
-            <Button variant="destructive" onClick={handleCancelOrder}>
+            <Button variant="destructive" className="hover:brightness-110 transition-all" onClick={handleCancelOrder}>
               Xóa
             </Button>
           </DialogFooter>

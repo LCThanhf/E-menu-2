@@ -278,7 +278,7 @@ export default function PaymentRequestsPage() {
             <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
               Không
             </Button>
-            <Button variant="destructive" onClick={handleDeleteRequest}>
+            <Button variant="destructive" className="hover:brightness-110 transition-all" onClick={handleDeleteRequest}>
               Xóa
             </Button>
           </DialogFooter>

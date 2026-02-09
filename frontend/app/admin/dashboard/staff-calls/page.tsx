@@ -268,7 +268,7 @@ export default function StaffCallsPage() {
             <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
               Không
             </Button>
-            <Button variant="destructive" onClick={handleDeleteCall}>
+            <Button variant="destructive" className="hover:brightness-110 transition-all" onClick={handleDeleteCall}>
               Xóa
             </Button>
           </DialogFooter>

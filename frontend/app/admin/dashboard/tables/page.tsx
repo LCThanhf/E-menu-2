@@ -226,7 +226,7 @@ export default function TablesPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                    className="text-red-600 hover:bg-red-500 hover:text-white dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white"
                     onClick={() => {
                       setDeletingTable(table)
                       setIsDeleteModalOpen(true)
@@ -341,7 +341,7 @@ export default function TablesPage() {
             <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
               Hủy
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button variant="destructive" className="hover:brightness-110 transition-all" onClick={handleDelete}>
               Xóa
             </Button>
           </DialogFooter>
