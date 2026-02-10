@@ -119,7 +119,16 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    /* Always show scrollbar to prevent layout shift when modal opens */
+    overflow-y: scroll;
+  }
   body {
     @apply bg-background text-foreground;
+  }
+  /* Remove padding-right that Radix adds when dialog opens (since we keep scrollbar visible) */
+  body[data-scroll-locked] {
+    padding-right: 0 !important;
+    margin-right: 0 !important;
   }
 }

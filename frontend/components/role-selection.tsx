@@ -10,6 +10,7 @@ import { StaffCallModal } from "@/components/staff-call-modal"
 import { PaymentCallModal } from "@/components/payment-call-modal"
 import { StaffCallConfirmModal } from "@/components/staff-call-confirm-modal"
 import { PaymentCallConfirmModal } from "@/components/payment-call-confirm-modal"
+import { ChatBubble } from "@/components/chat-bubble"
 import { createStaffCall, createPaymentRequest } from "@/lib/api"
 
 interface RoleSelectionProps {
@@ -61,6 +62,12 @@ export function RoleSelection({ tableNumber, tableSlug }: RoleSelectionProps) {
       
       if (result.success) {
         console.log("Staff call created:", result.data)
+        
+        // Add message to chat bubble
+        if ((window as any).__chatBubble?.addStaffCallMessage) {
+          (window as any).__chatBubble.addStaffCallMessage(reason, result.data.id)
+        }
+        
         setIsStaffConfirmOpen(true)
       } else {
         console.error("Failed to create staff call:", result.message)
@@ -90,6 +97,12 @@ export function RoleSelection({ tableNumber, tableSlug }: RoleSelectionProps) {
       
       if (result.success) {
         console.log("Payment request created:", result.data)
+        
+        // Add message to chat bubble
+        if ((window as any).__chatBubble?.addPaymentCallMessage) {
+          (window as any).__chatBubble.addPaymentCallMessage(paymentMethod, result.data.id)
+        }
+        
         setIsPaymentConfirmOpen(true)
       } else {
         console.error("Failed to create payment request:", result.message)
@@ -234,6 +247,9 @@ export function RoleSelection({ tableNumber, tableSlug }: RoleSelectionProps) {
         onClose={() => setIsPaymentConfirmOpen(false)}
         tableNumber={tableNumber}
       />
+
+      {/* Chat Bubble */}
+      <ChatBubble tableNumber={tableNumber} />
     </div>
   )
 }

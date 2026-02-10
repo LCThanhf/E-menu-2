@@ -106,6 +106,10 @@ export async function createStaffCall(data: CreateStaffCallData) {
   })
 }
 
+export async function getStaffCallsByTable(tableNumber: string) {
+  return fetchAPI<any[]>(`/staff-calls/table/${tableNumber}`)
+}
+
 // ============================================
 // Payment Requests API
 // ============================================
@@ -120,6 +124,10 @@ export async function createPaymentRequest(data: CreatePaymentRequestData) {
     method: 'POST',
     body: JSON.stringify(data),
   })
+}
+
+export async function getPaymentRequestsByTable(tableNumber: string) {
+  return fetchAPI<any[]>(`/payment-requests/table/${tableNumber}`)
 }
 
 // ============================================

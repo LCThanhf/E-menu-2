@@ -68,6 +68,48 @@ router.get('/pending', async (req, res) => {
 })
 
 // ============================================
+// Get Payment Requests by Table Number (Customer)
+// GET /api/payment-requests/table/:tableNumber
+// ============================================
+router.get('/table/:tableNumber', async (req, res) => {
+  try {
+    const { tableNumber } = req.params
+
+    const table = await prisma.table.findUnique({
+      where: { tableNumber },
+    })
+
+    if (!table) {
+      return res.status(404).json({
+        success: false,
+        message: 'Table not found',
+      })
+    }
+
+    const paymentRequests = await prisma.paymentRequest.findMany({
+      where: { tableId: table.id },
+      include: {
+        table: {
+          select: { id: true, tableNumber: true, tableName: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    res.json({
+      success: true,
+      data: paymentRequests,
+    })
+  } catch (error) {
+    console.error('Get table payment requests error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    })
+  }
+})
+
+// ============================================
 // Create Payment Request (Customer)
 // POST /api/payment-requests
 // ============================================
@@ -146,14 +188,6 @@ router.put('/:id', async (req, res) => {
         },
       },
     })
-
-    // If payment is completed, update table status to AVAILABLE
-    if (status === 'COMPLETED') {
-      await prisma.table.update({
-        where: { id: paymentRequest.tableId },
-        data: { status: 'AVAILABLE' },
-      })
-    }
 
     res.json({
       success: true,

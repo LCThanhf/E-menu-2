@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { MenuCard } from "@/components/menu-card"
 import { CartModal } from "@/components/cart-modal"
 import { OrderConfirmModal } from "@/components/order-confirm-modal"
+import { ChatBubble } from "@/components/chat-bubble"
 import { getMenuItems, getCategories, createOrder } from "@/lib/api"
 
 interface MenuPageProps {
@@ -141,6 +142,15 @@ export function MenuPage({ tableNumber, tableSlug }: MenuPageProps) {
 
       if (result.success) {
         console.log("Order created:", result.data)
+        
+        // Add message to chat bubble
+        if ((window as any).__chatBubble?.addOrderMessage) {
+          (window as any).__chatBubble.addOrderMessage(
+            cartItems.map((item) => ({ name: item.name, quantity: item.quantity })),
+            result.data.id
+          )
+        }
+        
         setCartItems([])
         setIsCartOpen(false)
         setIsOrderConfirmOpen(true)
@@ -284,6 +294,9 @@ export function MenuPage({ tableNumber, tableSlug }: MenuPageProps) {
         onClose={() => setIsOrderConfirmOpen(false)}
         tableNumber={tableNumber}
       />
+
+      {/* Chat Bubble */}
+      <ChatBubble tableNumber={tableNumber} />
     </div>
   )
 }

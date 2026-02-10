@@ -68,6 +68,48 @@ router.get('/pending', async (req, res) => {
 })
 
 // ============================================
+// Get Staff Calls by Table Number (Customer)
+// GET /api/staff-calls/table/:tableNumber
+// ============================================
+router.get('/table/:tableNumber', async (req, res) => {
+  try {
+    const { tableNumber } = req.params
+
+    const table = await prisma.table.findUnique({
+      where: { tableNumber },
+    })
+
+    if (!table) {
+      return res.status(404).json({
+        success: false,
+        message: 'Table not found',
+      })
+    }
+
+    const staffCalls = await prisma.staffCall.findMany({
+      where: { tableId: table.id },
+      include: {
+        table: {
+          select: { id: true, tableNumber: true, tableName: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    res.json({
+      success: true,
+      data: staffCalls,
+    })
+  } catch (error) {
+    console.error('Get table staff calls error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    })
+  }
+})
+
+// ============================================
 // Create Staff Call (Customer)
 // POST /api/staff-calls
 // ============================================

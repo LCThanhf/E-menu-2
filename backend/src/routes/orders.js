@@ -83,7 +83,7 @@ router.get('/table/:tableNumber', async (req, res) => {
     const orders = await prisma.order.findMany({
       where: {
         tableId: table.id,
-        status: { notIn: ['COMPLETED', 'CANCELLED'] },
+        status: { notIn: ['COMPLETED'] },
       },
       include: {
         orderItems: {
