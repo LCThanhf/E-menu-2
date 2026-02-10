@@ -10,6 +10,7 @@ A modern, full-stack digital menu solution for restaurants with real-time order 
 - Shopping cart and order placement
 - Staff call with customizable reasons
 - Payment requests with multiple methods
+- Real-time chat system to receive responses from the restaurant
 
 ### Admin Features
 - Dashboard with real-time statistics
@@ -119,6 +120,13 @@ Frontend runs on `http://localhost:3000`
 4. Process orders and update status
 5. Handle staff calls and payment requests
 6. Generate QR codes for tables
+
+### Chat System
+1. **Customer places order** → Chat shows order details → Auto-reply: "Nhà hàng đã nhận được yêu cầu"
+2. **Admin confirms order** → Chat auto-updates: "Nhà hàng đã xác nhận yêu cầu"
+3. **Admin cancels order** → Chat auto-updates: "Nhà hàng đã hủy yêu cầu"
+4. Same flow applies to staff calls and payment requests
+5. Chat history persists until table is reset to "AVAILABLE"
 
 ## Image Upload
 
