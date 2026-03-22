@@ -26,7 +26,7 @@ interface Table {
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
-const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000"
+const FRONTEND_URL = "https://e-menu-2.vercel.app"
 
 // Simple QR Code component using an external API
 function QRCodeDisplay({ value, size = 200 }: { value: string; size?: number }) {
