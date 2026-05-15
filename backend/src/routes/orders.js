@@ -18,7 +18,11 @@ const generateOrderNumber = () => {
 // ============================================
 router.get('/', async (req, res) => {
   try {
-    const { status, tableId, date } = req.query
+    const { status, tableId, date, page = 1, limit = 10 } = req.query
+    
+    const pageNumber = parseInt(page) || 1
+    const pageSize = parseInt(limit) || 10
+    const skip = (pageNumber - 1) * pageSize
 
     const where = {
       ...(status && { status }),
@@ -46,11 +50,21 @@ router.get('/', async (req, res) => {
         },
       },
       orderBy: { createdAt: 'desc' },
+      skip,
+      take: pageSize,
     })
+
+    const totalOrders = await prisma.order.count({ where })
 
     res.json({
       success: true,
       data: orders,
+      pagination: {
+        total: totalOrders,
+        page: pageNumber,
+        limit: pageSize,
+        totalPages: Math.ceil(totalOrders / pageSize),
+      }
     })
   } catch (error) {
     console.error('Get orders error:', error)

@@ -9,6 +9,8 @@ import {
   X,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
   Trash2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -82,16 +84,31 @@ export default function OrdersPage() {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false)
   const [cancellingOrder, setCancellingOrder] = useState<Order | null>(null)
 
-  useEffect(() => {
-    fetchOrders()
-  }, [])
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const limit = 10
 
-  const fetchOrders = async () => {
+  useEffect(() => {
+    fetchOrders(page, selectedStatus)
+  }, [page, selectedStatus])
+
+  const fetchOrders = async (currentPage = page, statusFilter = selectedStatus) => {
+    setIsLoading(true)
     try {
-      const response = await fetch(`${API_URL}/orders`)
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: limit.toString(),
+      })
+      if (statusFilter !== "all") {
+        params.append("status", statusFilter)
+      }
+      const response = await fetch(`${API_URL}/orders?${params.toString()}`)
       const data = await response.json()
       if (data.success) {
         setOrders(data.data)
+        if (data.pagination) {
+          setTotalPages(data.pagination.totalPages || 1)
+        }
       }
     } catch (error) {
       console.error("Failed to fetch orders:", error)
@@ -186,11 +203,6 @@ export default function OrdersPage() {
     setExpandedOrders(newExpanded)
   }
 
-  const filteredOrders = orders.filter((order) => {
-    if (selectedStatus === "all") return true
-    return order.status === selectedStatus
-  })
-
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -222,7 +234,7 @@ export default function OrdersPage() {
           <p className="text-muted-foreground">Quản lý các đơn hàng từ khách hàng</p>
         </div>
         <div className="flex gap-2">
-          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+          <Select value={selectedStatus} onValueChange={(val) => { setSelectedStatus(val); setPage(1); }}>
             <SelectTrigger className="w-40">
               <SelectValue placeholder="Trạng thái" />
             </SelectTrigger>
@@ -235,7 +247,7 @@ export default function OrdersPage() {
               ))}
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={fetchOrders}>
+          <Button variant="outline" onClick={() => fetchOrders(page, selectedStatus)}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Làm mới
           </Button>
@@ -243,13 +255,13 @@ export default function OrdersPage() {
       </div>
 
       {/* Orders List */}
-      {filteredOrders.length === 0 ? (
+      {orders.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-12 text-center">
           <p className="text-muted-foreground">Không có đơn hàng nào</p>
         </div>
       ) : (
         <div className="space-y-4">
-          {filteredOrders.map((order) => (
+          {orders.map((order) => (
             <div
               key={order.id}
               className="rounded-xl border border-border bg-card overflow-hidden"
@@ -371,6 +383,33 @@ export default function OrdersPage() {
               )}
             </div>
           ))}
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 pt-4">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-sm text-muted-foreground min-w-[80px] text-center">
+                Trang {page} / {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </div>
       )}
 
