@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { ArrowLeft, Search, ShoppingCart, UtensilsCrossed } from "lucide-react"
+import { ArrowLeft, Search, ShoppingCart, UtensilsCrossed, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { MenuCard } from "@/components/menu-card"
@@ -252,7 +252,14 @@ export function MenuPage({ tableNumber, tableSlug }: MenuPageProps) {
       {/* Menu Grid */}
       <section className="flex-1 px-4 py-8">
         <div className="mx-auto max-w-7xl">
-          {filteredItems.length > 0 ? (
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+              <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              <p className="text-muted-foreground animate-pulse">
+                Đang tải thực đơn, vui lòng đợi trong giây lát...
+              </p>
+            </div>
+          ) : filteredItems.length > 0 ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredItems.map((item) => (
                 <MenuCard

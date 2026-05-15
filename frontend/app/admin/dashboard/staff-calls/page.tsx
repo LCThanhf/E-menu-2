@@ -136,6 +136,17 @@ export default function StaffCallsPage() {
 
   const pendingCount = staffCalls.filter((c) => c.status === "PENDING").length
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="text-muted-foreground animate-pulse">
+          Đang tải dữ liệu, vui lòng đợi trong giây lát...
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -173,11 +184,7 @@ export default function StaffCallsPage() {
       </div>
 
       {/* Staff Calls List */}
-      {isLoading ? (
-        <div className="flex justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-        </div>
-      ) : filteredCalls.length === 0 ? (
+      {filteredCalls.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-12 text-center">
           <Bell className="mx-auto h-12 w-12 text-muted-foreground" />
           <p className="mt-4 text-muted-foreground">Không có yêu cầu gọi nhân viên nào</p>

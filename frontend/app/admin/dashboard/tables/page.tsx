@@ -170,6 +170,17 @@ export default function TablesPage() {
     }
   }
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="text-muted-foreground animate-pulse">
+          Đang tải dữ liệu, vui lòng đợi trong giây lát...
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -191,11 +202,7 @@ export default function TablesPage() {
       </div>
 
       {/* Tables Grid */}
-      {isLoading ? (
-        <div className="flex justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-        </div>
-      ) : tables.length === 0 ? (
+      {tables.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-12 text-center">
           <p className="text-muted-foreground">Chưa có bàn nào. Hãy thêm bàn mới!</p>
         </div>

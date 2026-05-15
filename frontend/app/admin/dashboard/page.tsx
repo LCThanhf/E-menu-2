@@ -8,6 +8,7 @@ import {
   Bell,
   CreditCard,
   TrendingUp,
+  Loader2,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -109,6 +110,17 @@ export default function DashboardPage() {
     },
   ]
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="text-muted-foreground animate-pulse">
+          Đang tải dữ liệu, vui lòng đợi trong giây lát...
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -119,24 +131,24 @@ export default function DashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {statCards.map((card, index) => (
-          <Card key={index} className="overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {card.title}
-              </CardTitle>
-              <div className={`rounded-full p-2 text-white ${card.color}`}>
-                {card.icon}
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-foreground">
-                {isLoading ? "..." : card.value}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+          {statCards.map((card, index) => (
+            <Card key={index} className="overflow-hidden">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {card.title}
+                </CardTitle>
+                <div className={`rounded-full p-2 text-white ${card.color}`}>
+                  {card.icon}
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-foreground">
+                  {card.value}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
       {/* Quick Actions */}
       <Card>

@@ -202,6 +202,17 @@ export default function OrdersPage() {
     return new Date(dateString).toLocaleString("vi-VN")
   }
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="text-muted-foreground animate-pulse">
+          Đang tải dữ liệu, vui lòng đợi trong giây lát...
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -232,11 +243,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Orders List */}
-      {isLoading ? (
-        <div className="flex justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-        </div>
-      ) : filteredOrders.length === 0 ? (
+      {filteredOrders.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-12 text-center">
           <p className="text-muted-foreground">Không có đơn hàng nào</p>
         </div>

@@ -279,6 +279,17 @@ export default function MenuItemsPage() {
     }).format(price)
   }
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="text-muted-foreground animate-pulse">
+          Đang tải dữ liệu, vui lòng đợi trong giây lát...
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -321,27 +332,21 @@ export default function MenuItemsPage() {
 
       {/* Menu Items Table */}
       <div className="rounded-lg border border-border bg-card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="border-b border-border bg-muted/50">
-              <tr>
-                <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Hình ảnh</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Tên món</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Danh mục</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Giá</th>
-                <th className="px-4 py-3 text-center text-sm font-medium text-muted-foreground">Trạng thái</th>
-                <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {isLoading ? (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="border-b border-border bg-muted/50">
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center">
-                    <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
-                  </td>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Hình ảnh</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Tên món</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Danh mục</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Giá</th>
+                  <th className="px-4 py-3 text-center text-sm font-medium text-muted-foreground">Trạng thái</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">Thao tác</th>
                 </tr>
-              ) : filteredItems.length === 0 ? (
-                <tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filteredItems.length === 0 ? (
+                  <tr>
                   <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
                     Không tìm thấy món ăn nào
                   </td>
@@ -408,10 +413,10 @@ export default function MenuItemsPage() {
                   </tr>
                 ))
               )}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
       {/* Add/Edit Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
